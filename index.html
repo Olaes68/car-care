@@ -31,7 +31,8 @@
     .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
     .title { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
     .subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
-    .settings-btn {
+    .header-actions { display: flex; gap: 8px; }
+    .icon-btn {
       background: var(--surface2); border: 1px solid var(--border);
       border-radius: 50%; width: 38px; height: 38px;
       display: flex; align-items: center; justify-content: center;
@@ -52,7 +53,9 @@
       border-radius: 12px; padding: 8px 16px;
       font-size: 13px; font-weight: 600; cursor: pointer;
     }
-    .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+    .section-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .link-btn { background: none; border: none; color: var(--oil); font-size: 12px; font-weight: 600; font-family: 'DM Mono', monospace; cursor: pointer; }
     .service-card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 18px; padding: 16px 18px; margin-bottom: 10px;
@@ -62,7 +65,7 @@
     .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .card-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
     .icon-oil { background: rgba(245,158,11,0.15); }
-    .icon-filter { background: rgba(16,185,129,0.15); }
+    .icon-filter { background: #eef1ef; }
     .icon-tire { background: rgba(59,130,246,0.15); }
     .card-info { flex: 1; }
     .card-name { font-size: 15px; font-weight: 600; }
@@ -88,13 +91,15 @@
     .modal {
       background: var(--surface); border-radius: 24px 24px 0 0;
       padding: 24px 20px 48px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
       transform: translateY(100%);
       transition: transform 0.3s ease;
       border: 1px solid var(--border);
     }
     .modal-overlay.open .modal { transform: translateY(0); }
     .modal-handle { width: 40px; height: 4px; background: #444; border-radius: 2px; margin: 0 auto 20px; }
-    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .modal-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
     .modal-field { margin-bottom: 16px; }
     .modal-field label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-family: 'DM Mono', monospace; display: block; margin-bottom: 6px; }
     .modal-field input {
@@ -103,6 +108,12 @@
       font-size: 18px; font-family: 'DM Mono', monospace; color: var(--text); outline: none;
     }
     .modal-field input:focus { border-color: var(--oil); }
+    .modal-field textarea {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 14px; resize: vertical; min-height: 70px;
+      font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none;
+    }
+    .modal-field textarea:focus { border-color: var(--oil); }
     .save-btn {
       width: 100%; background: var(--oil); color: #000; border: none;
       border-radius: 14px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px;
@@ -111,6 +122,26 @@
     .info-item-label { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 3px; }
     .info-item-val { font-size: 14px; font-weight: 500; font-family: 'DM Mono', monospace; }
     .footer-note { text-align: center; font-size: 12px; color: #555; margin-top: 24px; font-family: 'DM Mono', monospace; }
+
+    .history-list { display: flex; flex-direction: column; gap: 8px; }
+    .history-row {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 14px;
+    }
+    .history-date { font-size: 14px; font-weight: 500; }
+    .history-mileage { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
+    .history-notes { font-size: 13px; color: var(--text); margin-top: 6px; line-height: 1.4; white-space: pre-wrap; }
+    .history-main { display: flex; justify-content: space-between; align-items: flex-start; }
+    .history-edit {
+      background: none; border: none; color: var(--oil); font-size: 13px;
+      font-family: 'DM Mono', monospace; cursor: pointer; padding: 6px 8px;
+    }
+    .history-del {
+      background: none; border: none; color: #ef4444; font-size: 13px;
+      font-family: 'DM Mono', monospace; cursor: pointer; padding: 6px 8px;
+    }
+    .history-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 20px 0; }
   </style>
 </head>
 <body>
@@ -121,7 +152,10 @@
         <div class="title">Mini Cooper</div>
         <div class="subtitle">Maintenance Tracker</div>
       </div>
-      <button class="settings-btn" onclick="openModal()">⚙</button>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="openHistoryModal()" title="Service history">📋</button>
+        <button class="icon-btn" onclick="openModal()" title="Update mileage">⚙</button>
+      </div>
     </div>
   </div>
 
@@ -137,11 +171,13 @@
         <div class="mileage-stat-label">Next service</div>
         <div class="mileage-stat-val" id="next-service-miles">—</div>
       </div>
-      
     </div>
   </div>
 
-  <div class="section-label">Service Reminders</div>
+  <div class="section-label-row">
+    <div class="section-label">Service Reminders</div>
+    <button class="link-btn" onclick="openLogModal()">+ Log Service</button>
+  </div>
 
   <div class="service-card" id="card-oil">
     <div class="card-top">
@@ -161,7 +197,7 @@
 
   <div class="service-card" id="card-filter">
     <div class="card-top">
-      <div class="card-icon icon-filter">🔩</div>
+      <div class="card-icon icon-filter"><img src="data:image/png;base64,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" alt="Oil filter" style="width:26px;height:26px;object-fit:contain;" /></div>
       <div class="card-info">
         <div class="card-name">Oil Filter</div>
         <div class="card-due" id="due-filter">—</div>
@@ -177,7 +213,7 @@
 
   <div class="service-card" id="card-tire">
     <div class="card-top">
-      <div class="card-icon icon-tire">🔄</div>
+      <div class="card-icon icon-tire">🛞</div>
       <div class="card-info">
         <div class="card-name">Tire Rotation</div>
         <div class="card-due" id="due-tire">—</div>
@@ -209,36 +245,97 @@
   <div class="footer-note">⚠ reminder zone starts 500 mi before due</div>
 </div>
 
-<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+<!-- Update mileage modal -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event, 'modal')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">Update Details</div>
+    <div class="modal-title">Update Mileage</div>
+    <div class="modal-subtitle">Just updates your current odometer reading — doesn't touch your service history.</div>
     <div class="modal-field">
       <label>Current Mileage</label>
       <input type="number" id="input-mileage" inputmode="numeric" placeholder="56949" />
     </div>
+    <button class="save-btn" onclick="saveMileage()">Save</button>
+  </div>
+</div>
+
+<!-- Log a new service modal -->
+<div class="modal-overlay" id="log-modal" onclick="handleOverlayClick(event, 'log-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="log-modal-title">Log Service</div>
+    <div class="modal-subtitle" id="log-modal-subtitle">Adds a new record to your service history. Your older records stay put.</div>
     <div class="modal-field">
-      <label>Last Service Date</label>
-      <input type="date" id="input-date" />
+      <label>Service Date</label>
+      <input type="date" id="input-log-date" />
     </div>
     <div class="modal-field">
-      <label>Mileage at Last Service</label>
-      <input type="number" id="input-service-mileage" inputmode="numeric" placeholder="56949" />
+      <label>Mileage at Service</label>
+      <input type="number" id="input-log-mileage" inputmode="numeric" placeholder="56949" />
     </div>
-    <button class="save-btn" onclick="saveData()">Save & Update</button>
+    <div class="modal-field">
+      <label>Notes</label>
+      <textarea id="input-log-notes" placeholder="e.g. Full synthetic 5W-30, replaced air filter, rotated tires..."></textarea>
+    </div>
+    <button class="save-btn" id="log-save-btn" onclick="saveService()">Add to History</button>
+  </div>
+</div>
+
+<!-- Service history modal -->
+<div class="modal-overlay" id="history-modal" onclick="handleOverlayClick(event, 'history-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Service History</div>
+    <div class="modal-subtitle">Most recent first. The top entry is used to calculate your next-service reminders.</div>
+    <div class="history-list" id="history-list"></div>
   </div>
 </div>
 
 <script>
   const INTERVAL = 7000, WEEKLY = 120, WARN_ZONE = 500;
-  const DEFAULTS = { mileage: 56949, serviceMileage: 56949, serviceDate: '2026-04-25' };
+  const STORAGE_KEY = 'carcare';
+  let editingId = null;
+  const DEFAULTS = {
+    mileage: 56949,
+    services: [
+      { id: 1, date: '2026-04-25', mileage: 56949, notes: '' }
+    ]
+  };
 
   function load() {
-    try { return JSON.parse(localStorage.getItem('carcare') || 'null') || DEFAULTS; }
-    catch(e) { return DEFAULTS; }
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (!raw) return JSON.parse(JSON.stringify(DEFAULTS));
+
+      // Migrate old single-record format to the new history array
+      if (!raw.services) {
+        const migrated = {
+          mileage: raw.mileage,
+          services: [{ id: Date.now(), date: raw.serviceDate, mileage: raw.serviceMileage, notes: '' }]
+        };
+        persist(migrated);
+        return migrated;
+      }
+      return raw;
+    } catch(e) { return JSON.parse(JSON.stringify(DEFAULTS)); }
   }
-  function persist(d) { try { localStorage.setItem('carcare', JSON.stringify(d)); } catch(e) {} }
+
+  function persist(d) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {} }
   function fmt(n) { return Number(n).toLocaleString(); }
+  function escapeHtml(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  // Most recent service = highest mileage entry
+  function sortedServices(d) {
+    return [...d.services].sort((a, b) => b.mileage - a.mileage);
+  }
+  function lastService(d) {
+    const s = sortedServices(d);
+    return s.length ? s[0] : { date: null, mileage: 0 };
+  }
 
   function getStatus(ml) {
     if (ml <= 0) return { cls:'danger', badge:'Overdue', barCls:'fill-danger', cardCls:'status-danger' };
@@ -269,12 +366,17 @@
   function render() {
     const d = load();
     document.getElementById('display-mileage').innerHTML = fmt(d.mileage) + ' <span>mi</span>';
-    if (d.serviceDate) {
-      const dt = new Date(d.serviceDate + 'T12:00:00');
+
+    const last = lastService(d);
+    if (last.date) {
+      const dt = new Date(last.date + 'T12:00:00');
       document.getElementById('info-last-service').textContent = dt.toLocaleDateString('en-US');
+    } else {
+      document.getElementById('info-last-service').textContent = '—';
     }
-    document.getElementById('info-last-mileage').textContent = fmt(d.serviceMileage);
-    const dueAt = d.serviceMileage + INTERVAL;
+    document.getElementById('info-last-mileage').textContent = fmt(last.mileage);
+
+    const dueAt = last.mileage + INTERVAL;
     ['oil','filter','tire'].forEach(id => updateCard(id, dueAt, d.mileage));
     const ml = dueAt - d.mileage;
     document.getElementById('next-service-miles').textContent = ml > 0 ? fmt(ml) + ' mi away' : 'Overdue!';
@@ -283,21 +385,129 @@
   function openModal() {
     const d = load();
     document.getElementById('input-mileage').value = d.mileage;
-    document.getElementById('input-date').value = d.serviceDate || '';
-    document.getElementById('input-service-mileage').value = d.serviceMileage;
     document.getElementById('modal').classList.add('open');
   }
-
   function closeModal() { document.getElementById('modal').classList.remove('open'); }
-  function handleOverlayClick(e) { if (e.target.id === 'modal') closeModal(); }
 
-  function saveData() {
+  function saveMileage() {
     const d = load();
-    const mi = parseInt(document.getElementById('input-mileage').value) || d.mileage;
-    const date = document.getElementById('input-date').value || d.serviceDate;
-    const svcMi = parseInt(document.getElementById('input-service-mileage').value) || mi;
-    persist({ mileage: mi, serviceDate: date, serviceMileage: svcMi });
-    closeModal(); render();
+    const mi = parseInt(document.getElementById('input-mileage').value);
+    d.mileage = Number.isFinite(mi) ? mi : d.mileage;
+    persist(d);
+    closeModal();
+    render();
+  }
+
+  function openLogModal() {
+    editingId = null;
+    const d = load();
+    document.getElementById('log-modal-title').textContent = 'Log Service';
+    document.getElementById('log-modal-subtitle').textContent = "Adds a new record to your service history. Your older records stay put.";
+    document.getElementById('log-save-btn').textContent = 'Add to History';
+    document.getElementById('input-log-date').value = new Date().toISOString().slice(0, 10);
+    document.getElementById('input-log-mileage').value = d.mileage;
+    document.getElementById('input-log-notes').value = '';
+    document.getElementById('log-modal').classList.add('open');
+  }
+
+  function editService(id) {
+    const d = load();
+    const record = d.services.find(s => s.id === id);
+    if (!record) return;
+    editingId = id;
+    document.getElementById('log-modal-title').textContent = 'Edit Service';
+    document.getElementById('log-modal-subtitle').textContent = 'Updates this record only \u2014 nothing else in your history changes.';
+    document.getElementById('log-save-btn').textContent = 'Save Changes';
+    document.getElementById('input-log-date').value = record.date || '';
+    document.getElementById('input-log-mileage').value = record.mileage;
+    document.getElementById('input-log-notes').value = record.notes || '';
+    closeHistoryModal();
+    document.getElementById('log-modal').classList.add('open');
+  }
+
+  function closeLogModal() { editingId = null; document.getElementById('log-modal').classList.remove('open'); }
+
+  function saveService() {
+    const d = load();
+    const date = document.getElementById('input-log-date').value;
+    const mi = parseInt(document.getElementById('input-log-mileage').value);
+    const notes = document.getElementById('input-log-notes').value.trim();
+    if (!date || !Number.isFinite(mi)) return;
+
+    if (editingId !== null) {
+      // Update the existing record in place
+      const record = d.services.find(s => s.id === editingId);
+      if (record) {
+        record.date = date;
+        record.mileage = mi;
+        record.notes = notes;
+      }
+    } else {
+      // Append as a new record — never overwrite an existing one
+      d.services.push({ id: Date.now(), date, mileage: mi, notes });
+    }
+
+    // Keep current mileage in sync if this service is the highest on record
+    if (mi > d.mileage) d.mileage = mi;
+
+    persist(d);
+    closeLogModal();
+    render();
+  }
+
+  function openHistoryModal() {
+    renderHistory();
+    document.getElementById('history-modal').classList.add('open');
+  }
+  function closeHistoryModal() { document.getElementById('history-modal').classList.remove('open'); }
+
+  function renderHistory() {
+    const d = load();
+    const list = document.getElementById('history-list');
+    const rows = sortedServices(d);
+    if (!rows.length) {
+      list.innerHTML = '<div class="history-empty">No service records yet.</div>';
+      return;
+    }
+    list.innerHTML = rows.map(r => {
+      const dt = r.date ? new Date(r.date + 'T12:00:00').toLocaleDateString('en-US') : '—';
+      const notesHtml = r.notes
+        ? `<div class="history-notes">${escapeHtml(r.notes)}</div>`
+        : '';
+      return `
+        <div class="history-row">
+          <div class="history-main">
+            <div>
+              <div class="history-date">${dt}</div>
+              <div class="history-mileage">${fmt(r.mileage)} mi</div>
+            </div>
+            <div style="display:flex; gap:4px;">
+              <button class="history-edit" onclick="editService(${r.id})">Edit</button>
+              <button class="history-del" onclick="deleteService(${r.id})">Delete</button>
+            </div>
+          </div>
+          ${notesHtml}
+        </div>`;
+    }).join('');
+  }
+
+  function deleteService(id) {
+    const d = load();
+    if (d.services.length <= 1) {
+      alert("This is your only service record, so it can't be deleted. Edit it instead, or add another record first.");
+      return;
+    }
+    if (!confirm('Delete this service record? This can\'t be undone.')) return;
+    d.services = d.services.filter(s => s.id !== id);
+    persist(d);
+    renderHistory();
+    render();
+  }
+
+  function handleOverlayClick(e, modalId) {
+    if (e.target.id === modalId) {
+      document.getElementById(modalId).classList.remove('open');
+    }
   }
 
   render();
